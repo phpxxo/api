@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+</head>
+<body>
+	<h1>测试API验证</h1>
+</body>
+</html>
+<script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+<script src="sha1.js"></script>
+<script type="text/javascript">
+	$.ajax({
+		url: 'http://rohs.hustp.com/api/token',
+		type: 'GET',
+		data: {appid:'YFRUpoXifqqQLuM1',appsecret:'OV4yco2r3umMR8GD30LIhBDWWaaLGpQl'},
+		dataType: 'json',
+		success: function(data){
+			var json = {}
+			json['token'] = data.token;
+			// json['cate_id'] = 3;
+			json['page'] = 1;
+			json['pageNum'] = 3;
+
+			var sortJson = {}
+			var arr = [];  
+			    $.each(json, function(key, val) {arr[arr.length] = key;});  
+			    arr.sort();  
+			    $.each(arr, function(i, key) {
+			    	sortJson[key] = json[key];
+		    });  
+
+		    var str = $.param(sortJson);
+		    var str = SHA1(str);
+	
+			$.ajax({
+				url: 'http://rohs.hustp.com/api/articles/articles',
+				type: 'GET',
+				headers: {  
+                	"token": data.token,
+                	"sign": str,
+                	"timestamp": Date.parse( new Date())
+            	},
+            	data: {page:1, pageNum:3},
+				dataType: 'json',
+				success: function(res){
+					console.log(res);
+					
+				}
+			})
+		}
+	})
+</script>
