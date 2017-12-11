@@ -39,7 +39,7 @@
 				headers: {  
                 	"token": data.token,
                 	"sign": str,
-                	"timestamp": Date.parse( new Date())
+                	"timestamp": Date.parse( new Date())/1000
             	},
             	data: {page:1, pageNum:3},
 				dataType: 'json',
